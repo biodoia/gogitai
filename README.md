@@ -124,11 +124,37 @@ Vedi `docs/CONVERSATION.md` per il resoconto completo.
 
 - [x] Ricerca server git Go completata
 - [x] Architettura multi-backend definita
-- [x] Progetto inizializzato
-- [ ] GoGitAI Core (Go skeleton con FrameGoTUI)
-- [ ] Backend: Forgejo integration
-- [ ] Backend: Soft Serve integration
-- [ ] Sync connector
-- [ ] MCP server
-- [ ] Dashboard FrameGoTUI
-- [ ] Plugin system
+- [x] Visione completa documentata (docs/PLAN.md)
+- [x] Progetto inizializzato e pushato
+
+### Phase 1: Foundation ⬅️
+- [ ] Go skeleton con FrameGoTUI (1 backend + 2 frontend)
+- [ ] gogitai-agent daemon 24/7 con chat base
+- [ ] Forgejo integration (install, config, health)
+- [ ] Security gateway (Tailscale + embedded iframe)
+- [ ] Memogo integration per stato
+
+### Phase 2: Management UI
+- [ ] Dashboard multiple (overview, repos, CI/CD, agents, settings)
+- [ ] Embedded backend UI (iframe + xterm.js)
+- [ ] Plugin Store (cards + toggle install)
+- [ ] Notification system
+
+### Phase 3: Ecosystem
+- [ ] ghrego integration (discovery page)
+- [ ] govai integration (1-click deploy)
+- [ ] gociccidai integration (CI/CD pipeline)
+- [ ] Multi-backend sync connector
+
+### Phase 4: Autonomous Agents
+- [ ] Bot Agent Pool (worktree isolation)
+- [ ] Auto-fix, auto-merge, PR review
+- [ ] TODO list processing
+- [ ] Versioning automation
+
+### Phase 5: Custom Git (future)
+- [ ] Interfaccia git personalizzata
+- [ ] Smart commit messages
+- [ ] Visual git graph
+
+Vedi `docs/PLAN.md` per il piano completo.

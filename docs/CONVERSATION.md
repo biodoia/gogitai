@@ -123,6 +123,27 @@ Sergio: "così non mi devo preoccupare del reverse proxy di ciascuno, mi basta c
 - Zero reverse proxy per backend individuali
 - gogitai fa da gateway: auth → routing → iframe embed
 
+### Visione completa (23:10)
+
+Sergio ha delineato la visione completa di gogitai:
+
+1. **Agent residente 24/7** — conversazione naturale per gestire tutto
+2. **Plugin Store** — cards descrittive con toggle Android-style, agente che scandaglia il web
+3. **Notification system** — aggiornamenti backend, plugin, build, PR, novità ghrego
+4. **ghrego integration** — discovery di repo duplicati, nascosti, novità GitHub giornaliere, suggerimenti tipo "se uniamo questi 2 tuoi repo con questo 3° esterno → nuova app"
+5. **govai integration** — deploy con 1 click dalla dashboard
+6. **gociccidai integration** — CI/CD pipeline visuali, build logs real-time
+7. **Bot Agent Pool** — agent h24 per auto PR, bug fixing, auto-merge, TODO list, code improvement, versioning
+8. **Custom Git Interface** (Phase 2+) — interfaccia git personalizzata con solo funzioni utili + custom features
+
+Ricerche condotte:
+- **ComposioHQ/agent-orchestrator**: orchestrazione agenti paralleli in worktree isolati — ispirazione per Bot Agent Pool
+- **Sourcebot**: code search self-hosted (alternativa Sourcegraph), Zoekt engine, MCP server — per ghrego integration
+- **delightful-forgejo**: curated plugin list per Forgejo
+- **Qodo Merge**: AI code review, auto PR descriptions — per PR review automatizzata
+
+Documentazione formale in `docs/PLAN.md`
+
 ---
 
 ## Decisioni finali
