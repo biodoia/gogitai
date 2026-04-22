@@ -114,6 +114,15 @@ Soluzione: **dual mode**
 
 Dashboard multiple: overview, repo, CI/CD, agents, settings
 
+### Security: Single Entry Point
+
+Sergio: "così non mi devo preoccupare del reverse proxy di ciascuno, mi basta che la sicurezza dia sulla webpage di gogitai, senza dover esporre le webpage dei singoli"
+
+- Backend girano su **localhost/internal ports** — mai esposti direttamente
+- Solo gogitai ha TLS + auth + Tailscale
+- Zero reverse proxy per backend individuali
+- gogitai fa da gateway: auth → routing → iframe embed
+
 ---
 
 ## Decisioni finali

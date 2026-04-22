@@ -96,6 +96,10 @@ qualsiasi backend git self-hosted (Forgejo, Gitea, Soft Serve). Tutto integrato 
   - Un browser dentro il browser — tecnologie moderne (iframe sandboxed, postMessage, etc.)
   - L'utente non esce mai dalla dashboard gogitai
   - Oppure pulsante "apri in tab separata" per chi preferisce fullscreen
+- **Security benefit**: nessun backend esposto direttamente — solo gogitai è pubblicamente accessibile
+  - I backend (Forgejo/Gitea/Soft Serve) girano su localhost/internal ports
+  - Zero reverse proxy per backend individuali
+  - Auth, TLS, Tailscale — tutto gestito da gogitai una volta sola
 
 ### AI Integration
 - MCP server: gli agenti creano repo, fanno PR, gestiscono CI/CD
