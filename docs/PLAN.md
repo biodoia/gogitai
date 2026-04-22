@@ -120,7 +120,15 @@ Ispirato a [ComposioHQ/agent-orchestrator](https://github.com/ComposioHQ/agent-o
 - L'utente supervisiona, non micromanage
 - Notifica solo quando serve decisione umana
 
-### 13. Progotti Integration (Project Management)
+### 13. Spegoplain Integration (Spec-Driven Development)
+- Spegoplain è l'agente SDD dell'ecosistema: scrive specs, pianifica sviluppo
+- In gogitai: pagina "Roadmap" con specs e piani generati da Spegoplain
+- Link specs → repo → branch → PR → CI/CD: flusso completo tracciabile
+- L'agente residente: "gogitai, cosa manca per completare la spec X?" → risposta incrociando Spegoplain + stato repo + Progotti
+- Auto-generazione di branch/PR dalla spec: Spegoplain pianifica → gogitai crea branch → Bot Agent Pool implementa
+- Progress tracking: % spec completata basata su commit/PR/issue collegate
+
+### 14. Progotti Integration (Project Management)
 - Progotti è il gestore di progetti dell'ecosistema Autoschei
 - In gogitai: pagina "Projects" con overview progetti, stato, milestone
 - Link bidirezionale repo ↔ progetto: ogni repo collegata al suo progetto Progotti
