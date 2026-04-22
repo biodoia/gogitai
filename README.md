@@ -1,83 +1,122 @@
 # 🦞 GoGitAI
 
-**Self-hosted Git server AI-native** — Forgejo + MCP + FrameGoTUI
+**Git server management layer AI-native** — Orchestratore multi-backend per git self-hosted
 
-Un server git self-hosted scritto in Go, completamente integrato nell'ecosistema Autoschei.
-Gli agenti gestiscono repo, PR, CI/CD in completa autonomia.
+GoGitAI non è un git server. È il **layer di management** che wrappa, installa, aggiorna e sincronizza
+qualsiasi backend git self-hosted (Forgejo, Gitea, Soft Serve). Tutto integrato nell'ecosistema Autoschei.
+
+## Filosofia
+
+> **I backend git sono dipendenze, non il prodotto.**
+>
+> GoGitAI è l'orchestratore. Forgejo/Gitea/Soft Serve sono swappabili.
+> Questo apre porte: multi-backend, sync, plugin management, monitoring,
+> tutto sotto un'unica interfaccia FrameGoTUI.
 
 ## Stack
 
-- **Forgejo** — Git forge FOSS (fork di Gitea), Go, MIT→GPLv3+
+- **GoGitAI Core** — Orchestratore Go (install, update, rollback, sync, plugins)
+- **Backend supportati:** Forgejo, Gitea, Soft Serve (swappabili)
 - **FrameGoTUI** — Dashboard TUI cyberpunk + WebUI HTMX
 - **MCP Server** — Protocollo agentico per operazioni git
 - **A2A** — Agent-to-Agent per delega task tra agenti
 - **Memogo** — Storage centralizzato (stato repo, build, deploy)
 - **Tailscale** — Accesso sicuro via mesh, zero porte aperte
 
-## Perché Forgejo
+## Backends valutati (2026-04-22)
 
-Dalla ricerca approfondita del 2026-04-22, i candidati erano:
+| Progetto | Scritto in | Licenza | CI/CD | Web UI | Ecosistema | Note |
+|----------|-----------|---------|-------|--------|------------|------|
+| **Gitea** | Go | MIT | ✅ Actions | ✅ | ✅ 20k+ plugins | Community grande, governance commerciale |
+| **Forgejo** | Go | GPLv3+ | ✅ Actions | ✅ | ⚠️ Più piccolo | FOSS puro, governance democratica |
+| **Gogs** | Go | MIT | ❌ | ✅ | ❌ | Lightweight, sviluppo quasi fermo |
+| **Soft Serve** | Go | MIT | ❌ | ❌ | ❌ | TUI via SSH (Charmbracelet), no forge |
 
-| Progetto | Scritto in | Licenza | CI/CD | Web UI | Note |
-|----------|-----------|---------|-------|--------|------|
-| **Gitea** | Go | MIT | ✅ Actions | ✅ | Community grande, ma governance commerciale |
-| **Forgejo** | Go | GPLv3+ | ✅ Actions | ✅ | **FOSS puro, governance democratica** |
-| **Gogs** | Go | MIT | ❌ | ✅ | Lightweight ma sviluppo quasi fermo |
-| **Soft Serve** | Go | MIT | ❌ | ❌ | TUI bellissimo (Charmbracelet), ma no forge features |
-
-**Scelta: Forgejo** — FOSS al 100%, CI/CD compatibile GitHub Actions, API completa per integrazione agentica, community attiva e trasparente.
+**Approccio: supportare multi-backend.** Forgejo come default per FOSS, Gitea per ecosistema più ampio, Soft Serve come mirror SSH-only.
 
 ## Architettura
 
 ```
-┌──────────────────────────────────────────────────┐
-│                  GoGitAI                          │
-│                                                   │
-│  ┌─────────────────────────────────────────────┐ │
-│  │         Forgejo (git forge core)            │ │
-│  │  • Repository management                    │ │
-│  │  • Forgejo Actions (CI/CD)                  │ │
-│  │  • API REST + webhooks                      │ │
-│  │  • Issues, PR, code review                  │ │
-│  └──────────────────┬──────────────────────────┘ │
-│                     │                             │
-│         ┌───────────┼───────────┐                 │
-│         ▼           ▼           ▼                 │
-│  ┌────────────┐ ┌─────────┐ ┌──────────┐        │
-│  │ MCP Server │ │ A2A     │ │ FrameGo  │        │
-│  │ (tools per │ │ (agent  │ │ TUI dash │        │
-│  │  agent AI) │ │  delega)│ │ + WebUI  │        │
-│  └──────┬─────┘ └────┬────┘ └────┬─────┘        │
-│         │            │           │                │
-│  ┌──────┴────────────┴───────────┴──────┐        │
-│  │           Memogo (storage)            │        │
-│  │  Build status, deploy state, metrics  │        │
-│  └──────────────────────────────────────┘        │
-│                     │                             │
-│  ┌──────────────────┴──────────────────────┐     │
-│  │        Tailscale (mesh network)         │     │
-│  │   Accesso solo da rete privata 100.x    │     │
-│  └─────────────────────────────────────────┘     │
-└──────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│                      GoGitAI                             │
+│             (Management Layer in Go)                     │
+│                                                          │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐  │
+│  │ TUI Dashboard│  │ WebUI (HTMX) │  │  MCP Server   │  │
+│  │ (FrameGoTUI)│  │              │  │  (per agenti)  │  │
+│  └──────┬──────┘  └──────┬───────┘  └───────┬───────┘  │
+│         │                │                   │           │
+│  ┌──────┴────────────────┴───────────────────┴───────┐  │
+│  │              gogitai Core (Go)                      │  │
+│  │  • Install / Update / Rollback di backend          │  │
+│  │  • Plugin management                               │  │
+│  │  • Multi-backend sync (Forgejo ↔ Soft Serve)       │  │
+│  │  • Repo mirroring / sync connector                 │  │
+│  │  • Config unificata                                │  │
+│  │  • Health monitoring                               │  │
+│  │  • Backup / Restore                                │  │
+│  └──────┬──────────────┬──────────────┬─────────────┘  │
+│         │              │              │                  │
+│  ┌──────┴──────┐ ┌─────┴──────┐ ┌────┴───────────┐    │
+│  │  Backend:   │ │ Backend:   │ │ Backend:       │    │
+│  │  Forgejo    │ │  Gitea     │ │  Soft Serve    │    │
+│  │  (default)  │ │            │ │  (mirror SSH)  │    │
+│  └─────────────┘ └────────────┘ └────────────────┘    │
+│         │              │              │                  │
+│  ┌──────┴──────────────┴──────────────┴──────────────┐ │
+│  │              Memogo (storage/memoria)               │ │
+│  └────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │              Tailscale (mesh network)               │ │
+│  └────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────┘
 ```
+
+## Cosa può fare gogitai
+
+### Lifecycle Management
+- Installare backend git con un comando (`gogitai install forgejo`)
+- Aggiornare senza downtime (`gogitai update`)
+- Rollback se qualcosa si rompe
+- Gestire config da un unico posto
+
+### Multi-Backend Sync
+- Mirror repo tra Forgejo e Soft Serve automaticamente
+- Un repo pushato su Forgejo → appare su Soft Serve via SSH
+- Connettore configurabile per tipo di sync (one-way, bi-directional)
+
+### Plugin System
+- Forgejo/Gitea Actions sono già plugin
+- GoGitAI aggiunge un layer di plugin propri (monitoring, backup, notifiche)
+
+### AI Integration
+- MCP server: gli agenti creano repo, fanno PR, gestiscono CI/CD
+- A2A: delega task git ad altri agenti dell'ecosistema
+- Dashboard FrameGoTUI: tutto visibile da TUI e WebUI
 
 ## Decisioni della conversazione fondativa (2026-04-22)
 
 Vedi `docs/CONVERSATION.md` per il resoconto completo.
 
 ### Riassunto decisioni:
-1. ✅ **Forgejo** come git forge (non Gitea, non Gogs, non Soft Serve)
-2. ✅ **FrameGoTUI** per la dashboard (TUI + WebUI)
-3. ✅ **MCP server** per operazioni git agentiche
-4. ✅ **Tailscale** per esposizione sicura (zero porte pubbliche)
-5. ✅ **Memogo** per storage (build, deploy, stato repo)
+1. ✅ **Forgejo** come backend default (Gitea supportato come alternativa)
+2. ✅ **Soft Serve** come mirror SSH opzionale
+3. ✅ **GoGitAI** è l'orchestratore, non il server — backend sono dipendenze
+4. ✅ **Multi-backend sync** tra forge diversi
+5. ✅ **FrameGoTUI** per la dashboard (TUI + WebUI)
+6. ✅ **MCP server** per operazioni git agentiche
+7. ✅ **Tailscale** per esposizione sicura (zero porte pubbliche)
+8. ✅ **Memogo** per storage (build, deploy, stato repo)
 
 ## Stato
 
 - [x] Ricerca server git Go completata
-- [x] Forgejo scelto
+- [x] Architettura multi-backend definita
 - [x] Progetto inizializzato
-- [ ] Forgejo installato su x870
-- [ ] MCP server per Forgejo
+- [ ] GoGitAI Core (Go skeleton con FrameGoTUI)
+- [ ] Backend: Forgejo integration
+- [ ] Backend: Soft Serve integration
+- [ ] Sync connector
+- [ ] MCP server
 - [ ] Dashboard FrameGoTUI
-- [ ] Integrazione agenti Autoschei
+- [ ] Plugin system

@@ -76,19 +76,55 @@ Per un'azienda agentica 100% indipendente:
 
 ---
 
+---
+
+## Rivisitazione architetturale (22:48)
+
+**Sergio:** "ipotizzando di installare forgejo, vorrei che lo wrappiamo in una app che si occupi di installarlo, aggiornarlo, gestire eventuali plugins, e questa app sarà appunto gogitai. così forgejo diventa semplicemente una dipendenza, non devo modificare nulla, ma avendo questo layer di management aggiuntivo, mi si aprono molte più opportunità. ad esempio, potrei volere 2 server, sia forgejo che soft serve, magari installando un connettore che li tenga sincronizzati a livello di repositories."
+
+### Cambio di paradigma
+
+Da: "gogitai = Forgejo wrapper"
+A: **"gogitai = orchestratore multi-backend"**
+
+Forgejo/Gitea/Soft Serve diventano **dipendenze**, non il prodotto.
+GoGitAI è il layer di management che li installa, aggiorna, sincronizza.
+
+### Rivalutazione Gitea
+
+Sergio chiede: "siamo sicuri che gitea non sia meglio come ecosistema?"
+
+Risposta: Gitea ha **20k+ Actions plugins**, VSCode plugin, JetBrains plugin, community più grande.
+Forgejo ha governance più trasparente e test migliori.
+Ma con gogitai come layer, **non bisogna scegliere** — si supportano entrambi come backend.
+
+### Feature chiave emerse
+- Lifecycle management: `gogitai install forgejo`, `gogitai update`, `gogitai rollback`
+- Multi-backend sync: Forgejo ↔ Soft Serve mirror automatico
+- Plugin system: sopra i backend, non dentro
+- MCP server: agenti operano su repo autonomamente
+
+---
+
 ## Decisioni finali
 
-1. ✅ **Forgejo** come git forge
-2. ✅ **FrameGoTUI** per dashboard (TUI + WebUI)
-3. ✅ **MCP server** per operazioni git agentiche
-4. ✅ **Tailscale** per accesso sicuro
-5. ✅ **Memogo** per storage (build, deploy, stato)
-6. ✅ Progetto `gogitai` creato in `/home/lisergico25/projects/gogitai`
+1. ✅ **Forgejo** come backend default (Gitea supportato come alternativa)
+2. ✅ **Soft Serve** come mirror SSH opzionale
+3. ✅ **GoGitAI è l'orchestratore** — backend sono dipendenze swappabili
+4. ✅ **Multi-backend sync** tra forge diversi
+5. ✅ **FrameGoTUI** per dashboard (TUI + WebUI)
+6. ✅ **MCP server** per operazioni git agentiche
+7. ✅ **Tailscale** per accesso sicuro (zero porte pubbliche)
+8. ✅ **Memogo** per storage (build, deploy, stato)
+9. ✅ Progetto `gogitai` creato in `/home/lisergico25/projects/gogitai`
 
 ---
 
 ## Prossimi passi
-- [ ] Installare Forgejo su x870 via Tailscale
-- [ ] Creare MCP server per Forgejo
+- [ ] GoGitAI Core (Go skeleton con FrameGoTUI)
+- [ ] Backend: Forgejo integration
+- [ ] Backend: Soft Serve integration
+- [ ] Sync connector
+- [ ] MCP server
 - [ ] Dashboard FrameGoTUI
-- [ ] Integrazione agenti Autoschei
+- [ ] Plugin system
