@@ -120,7 +120,16 @@ Ispirato a [ComposioHQ/agent-orchestrator](https://github.com/ComposioHQ/agent-o
 - L'utente supervisiona, non micromanage
 - Notifica solo quando serve decisione umana
 
-### 13. Git Integration (Standard)
+### 13. Progotti Integration (Project Management)
+- Progotti è il gestore di progetti dell'ecosistema Autoschei
+- In gogitai: pagina "Projects" con overview progetti, stato, milestone
+- Link bidirezionale repo ↔ progetto: ogni repo collegata al suo progetto Progotti
+- TODO list del progetto visibile nella dashboard repo
+- L'agente sincronizza: chiude issue → aggiorna Progotti, completa milestone → tagga repo
+- Board Kanban-style nella WebUI per visualizzare stato progetti
+- L'agente residente: "gogitai, a che punto è il progetto framegotui?" → risposta da Progotti + stato repo + CI/CD
+
+### 14. Git Integration (Standard)
 - Clone, push, pull, fetch via gogitai
 - Branch management
 - Tag e release

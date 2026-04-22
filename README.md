@@ -157,4 +157,5 @@ Vedi `docs/CONVERSATION.md` per il resoconto completo.
 - [ ] Smart commit messages
 - [ ] Visual git graph
 
-Vedi `docs/PLAN.md` per il piano completo.
+Vedi `docs/PLAN.md` per il piano completo, incluse integrazioni con:
+ghrego, govai, gociccidai, progotti, e Bot Agent Pool.
