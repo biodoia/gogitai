@@ -120,6 +120,18 @@ Ispirato a [ComposioHQ/agent-orchestrator](https://github.com/ComposioHQ/agent-o
 - L'utente supervisiona, non micromanage
 - Notifica solo quando serve decisione umana
 
+### 12. Environment Tiers (dev / staging / prod)
+- **3 ambienti isolati** su subnet Tailscale separate:
+  - `dev` → sviluppo, rollback facile, dati fake, agenti sperimentano
+  - `staging` → pre-produzione, dati reali mirrorati, test completi
+  - `prod` → produzione, deploy solo dopo approval, monitored 24/7
+- Ogni tier ha le sue istanze backend (Forgejo/Gitea), i suoi agenti, le sue config
+- Promozione: dev → staging → prod con approval gate
+- govai gestisce il deploy cross-tier
+- gociccidai ha pipeline separate per tier
+- Tailscale ACL per controllare chi accede a cosa
+- Dashboard mostra stato di tutti e 3 i tier in un'unica vista
+
 ### 13. Spegoplain Integration (Spec-Driven Development)
 - Spegoplain è l'agente SDD dell'ecosistema: scrive specs, pianifica sviluppo
 - In gogitai: pagina "Roadmap" con specs e piani generati da Spegoplain

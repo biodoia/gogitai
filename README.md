@@ -145,6 +145,7 @@ Vedi `docs/CONVERSATION.md` per il resoconto completo.
 - [ ] govai integration (1-click deploy)
 - [ ] gociccidai integration (CI/CD pipeline)
 - [ ] Multi-backend sync connector
+- [ ] 3-tier environment (dev/staging/prod) su subnet Tailscale separate
 
 ### Phase 4: Autonomous Agents
 - [ ] Bot Agent Pool (worktree isolation)
