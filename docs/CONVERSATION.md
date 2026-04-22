@@ -104,6 +104,16 @@ Ma con gogitai come layer, **non bisogna scegliere** — si supportano entrambi 
 - Plugin system: sopra i backend, non dentro
 - MCP server: agenti operano su repo autonomamente
 
+### Embedded Browser UI
+
+Sergio: "per l'interfaccia web di gogitai, possiamo avere varie dashboard, e poi dei tastoni che quando li clicco mi aprono l'interfaccia web di gitea o forgejo. oppure, se possibile, li possiamo fare embedded, dato che con le tecnologie di oggi si può avere un browser dentro ad un browser"
+
+Soluzione: **dual mode**
+1. **Embedded mode** — iframe sandboxed nella WebUI gogitai (l'utente non esce mai)
+2. **External mode** — pulsante "apri in tab" per fullscreen
+
+Dashboard multiple: overview, repo, CI/CD, agents, settings
+
 ---
 
 ## Decisioni finali

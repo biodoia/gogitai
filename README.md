@@ -89,6 +89,14 @@ qualsiasi backend git self-hosted (Forgejo, Gitea, Soft Serve). Tutto integrato 
 - Forgejo/Gitea Actions sono già plugin
 - GoGitAI aggiunge un layer di plugin propri (monitoring, backup, notifiche)
 
+### WebUI Dashboard
+- Multiple dashboard views (overview, repo, CI/CD, agents, settings)
+- **Pulsanti quick-access** per aprire l'interfaccia nativa dei backend (Forgejo/Gitea/Soft Serve)
+- **Embedded browser**: le UI dei backend girano dentro iframe/embed nella WebUI di gogitai
+  - Un browser dentro il browser — tecnologie moderne (iframe sandboxed, postMessage, etc.)
+  - L'utente non esce mai dalla dashboard gogitai
+  - Oppure pulsante "apri in tab separata" per chi preferisce fullscreen
+
 ### AI Integration
 - MCP server: gli agenti creano repo, fanno PR, gestiscono CI/CD
 - A2A: delega task git ad altri agenti dell'ecosistema
