@@ -149,7 +149,38 @@ Ispirato a [ComposioHQ/agent-orchestrator](https://github.com/ComposioHQ/agent-o
 - Board Kanban-style nella WebUI per visualizzare stato progetti
 - L'agente residente: "gogitai, a che punto è il progetto framegotui?" → risposta da Progotti + stato repo + CI/CD
 
-### 14. Git Integration (Standard)
+### 14. News Bollettino (Daily Hot Repos)
+- Pagina "News" nella dashboard con feed giornaliero di repo hot
+- Fonti aggregate:
+  - **GitHub Trending** (scraping API)
+  - **Trendshift.io** — alternativa open source a GitHub Trending, scoring algoritmico, trending per language/topic, supporta MCP
+  - **daily.dev** — aggregatore developer news comunitario
+  - **zread** — nostra skill di lettura/riassunto
+  - **Hacker News** (API ufficiale)
+  - **GitNews** (git.news) — trending da GitHub + HN + Reddit
+  - **DevURLs** (devurls.com) — aggregatore developer news
+  - **Hackertab** — browser extension con GitHub Trending + HN + DevTo + Product Hunt
+- L'agente filtra per interessi (Go, Charmbracelet, AI agents, self-hosted)
+- Notifica giornaliera: "Ehi Sergio, oggi in trending: [repo1], [repo2], [repo3]"
+- Link diretto per mirror/sync con 1 click
+
+### 15. Repo Sync (Stars, Watched, Dependencies, Private)
+- Mirror automatico di:
+  - Repo GitHub starred → Forgejo (auto-discovery)
+  - Repo private vecchie → Forgejo (backup/sync)
+  - Repo watched → mirror read-only
+  - Dependencies (go.mod/go.sum) → mirror dipendenze Go
+- Tool di riferimento:
+  - **Gitea Mirror** (giteamirror.com) — WebUI, auto-discovery, scheduler, Helm chart
+  - **GitHub-Backup** (clockfort) — backup repo user/org
+  - **SierraSoftworks/github-backup** — backup stars, repos, gists, releases
+  - **go-git/v5** — operazioni programmatiche per sync custom
+- Dashboard "Sync" mostra stato mirror, ultimo sync, conflitti
+- Per le dipendenze: parse go.mod → mirror su Forgejo
+  - Se dependency scompare da upstream → hai il backup
+  - Se esce aggiornamento → notifica + auto-mirror
+
+### 16. Git Integration (Standard)
 - Clone, push, pull, fetch via gogitai
 - Branch management
 - Tag e release
@@ -268,6 +299,10 @@ Ispirato a [ComposioHQ/agent-orchestrator](https://github.com/ComposioHQ/agent-o
 - [ ] govai integration (1-click deploy)
 - [ ] gociccidai integration (CI/CD pipeline)
 - [ ] Multi-backend sync connector
+
+### Phase 3.5: News & Sync
+- [ ] News Bollettino (daily trending feed)
+- [ ] Dependency/Star/Private repo sync
 
 ### Phase 4: Autonomous Agents
 - [ ] Bot Agent Pool (worktree isolation)

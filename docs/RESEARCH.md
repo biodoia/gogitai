@@ -274,3 +274,95 @@ dev → commit → auto-deploy su subnet dev
 3. **Testare** `forgejo-mcp` esistente — potrebbe fare già molto del lavoro MCP
 4. **Valutare** Sourcebot per la search — ha già MCP server integrato
 5. **xterm.js** per l'embed di Soft Serve — standard de facto
+
+---
+
+## 11. News & Trending Sources (Bollettino)
+
+### ⭐⭐ Trendshift.io
+- **Sito:** trendshift.io
+- **Cos'è:** Alternativa open source a GitHub Trending
+- **Features:** scoring algoritmico (non solo star), trending per language/topic, monthly insights, MCP support
+- **Per gogitai:** fonte primaria per il bollettino news + integrazione MCP
+
+### daily.dev
+- **Sito:** daily.dev
+- **Cos'è:** Aggregatore developer news comunitario, feed personalizzabile
+- **Per gogitai:** fonte secondaria per articoli e news
+
+### GitNews
+- **Sito:** git.news
+- **Cos'è:** Trending repos da GitHub + Hacker News + Reddit in un'unica interfaccia
+- **Per gogitai:** aggregatore multi-piattaforma
+
+### DevURLs
+- **Sito:** devurls.com
+- **Cos'è:** Aggregatore developer news minimale
+- **Per gogitai:** fonte leggera
+
+### Hackertab.dev
+- **Repo:** github.com/medyo/hackertab.dev
+- **Cos'è:** Browser extension (Chrome + Firefox) per new tab con GitHub Trending + HN + DevTo + Product Hunt
+- **Per gogitai:** UX reference per il bollettino, pattern di aggregazione
+
+### Hacker News API
+- **Repo:** github.com/HackerNews/API
+- **API pubblica:** gratuito, no auth, Firebase-based
+- **Per gogitai:** fonte per tech news generali
+
+### Altre fonti:
+- **GitHub Trending** (scraping, no API ufficiale)
+- **Product Hunt** (API disponibile)
+- **Lobsters** (comunità tech, RSS)
+- **RSS generici** (FreshRSS/Miniflux per aggregazione self-hosted)
+
+---
+
+## 12. Repo Sync & Backup (Stars, Private, Dependencies)
+
+### ⭐⭐ Gitea Mirror
+- **Sito:** giteamirror.com
+- **Cos'è:** Web app self-hosted per mirror GitHub → Gitea/Forgejo
+- **Features:**
+  - Auto-discovery di nuove repo GitHub
+  - Backup automatico starred repos in org dedicata
+  - Scheduler con cleanup automatico
+  - Helm chart per K8s
+  - Handle orphaned repositories (archive)
+- **Per gogitai:** riferimento diretto per il modulo sync
+
+### GitHub-Backup (clockfort)
+- **Repo:** github.com/clockfort/GitHub-Backup
+- **Cos'è:** Backup automatico tutte le repo di un user/org GitHub
+- **Per gogitai:** script di riferimento per backup iniziale
+
+### SierraSoftworks/github-backup
+- **Repo:** github.com/SierraSoftworks/github-backup
+- **Cos'è:** Backup strutturato con YAML config
+- **Features:** backup stars, repos, gists, releases, filtrabile
+- **Per gogitai:** config YAML come riferimento per il nostro sync config
+
+### Sync Dependencies (go.mod/go.sum)
+- **Approccio:** parse go.mod → lista dependencies → per ogni repo → git clone --mirror su Forgejo
+- **go-git/v5** per le operazioni programmatiche
+- **Benefit:** se una dependency scompare da GitHub, hai il mirror locale
+- **gogitai aggiunge:** notifica aggiornamenti dependency + auto-sync
+
+### Pattern per gogitai sync module:
+```
+Fonti:
+  GitHub stars → auto-mirror Forgejo
+  GitHub private repos → mirror + sync bidirezionale
+  go.mod dependencies → mirror read-only
+  Watched repos → mirror read-only
+
+Trigger:
+  Scheduler (ogni 6h default)
+  Webhook (push GitHub → pull + sync)
+  Manuale (bottone sync in dashboard)
+
+Output:
+  Mirror su Forgejo (org dedicata per tipo)
+  Stato in Memogo
+  Notifiche per nuove repo/aggiornamenti
+```
